@@ -58,9 +58,21 @@ export function useThemeState(): ThemeContextValue {
     }
   }, [])
 
+  /**
+   * El ciclo avanza sobre el tema que se VE, no sobre el nombre del modo.
+   *
+   * Ciclar `auto → light → dark` parece correcto hasta que el sistema ya está
+   * en claro: ahí el primer clic no mueve nada en pantalla y hacen falta dos
+   * para llegar a oscuro. Saliendo de `auto` se salta directo al tema
+   * contrario al que se está viendo, así que claro y oscuro siempre están a
+   * un clic. El último paso devuelve el control al sistema operativo.
+   */
   const cycleTheme = useCallback(() => {
-    setMode(mode === 'auto' ? 'light' : mode === 'light' ? 'dark' : 'auto')
-  }, [mode, setMode])
+    const opposite: ResolvedTheme = systemTheme === 'light' ? 'dark' : 'light'
+    if (mode === 'auto') setMode(opposite)
+    else if (mode === opposite) setMode(systemTheme)
+    else setMode('auto')
+  }, [mode, systemTheme, setMode])
 
   return { mode, resolved, setMode, cycleTheme }
 }
