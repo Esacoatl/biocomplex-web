@@ -146,9 +146,11 @@ capa 1; el resto del código no se toca.
   (texto), JetBrains Mono (etiquetas y cifras).
 - La marca se escribe a dos tonos con `<BiocomplexName />`: «Bio» en tinta, «complex» en el
   acento. En texto corrido el nombre va entero.
-- Tema claro / oscuro / automático. Arranca en automático siguiendo al sistema operativo, y
-  un script en `index.html` fija el atributo antes del primer pintado para evitar el
-  parpadeo.
+- Tema claro y oscuro. Arranca siguiendo al sistema operativo y un script en `index.html`
+  fija el atributo antes del primer pintado para evitar el parpadeo; en cuanto alguien usa
+  el botón, su elección manda y se guarda. El botón es un interruptor de dos estados: el
+  modo `auto` existe en `useTheme` (`setMode('auto')`) pero no está en el recorrido del
+  botón, porque un tercer estado obliga a un clic que no cambia nada en pantalla.
 - Idioma ES/EN: el contenido se declara como `bi('español', 'english')` y el conmutador
   está en la cabecera.
 - Ilustraciones en `src/components/site/Illustrations.tsx` — catorce piezas con un mismo

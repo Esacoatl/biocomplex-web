@@ -24,7 +24,7 @@ export interface ThemeContextValue {
   mode: ThemeMode
   resolved: ResolvedTheme
   setMode: (mode: ThemeMode) => void
-  cycleTheme: () => void
+  toggleTheme: () => void
 }
 
 export const ThemeContext = createContext<ThemeContextValue | null>(null)
@@ -59,22 +59,20 @@ export function useThemeState(): ThemeContextValue {
   }, [])
 
   /**
-   * El ciclo avanza sobre el tema que se VE, no sobre el nombre del modo.
+   * Alterna claro ↔ oscuro. Siempre en un solo clic.
    *
-   * Ciclar `auto → light → dark` parece correcto hasta que el sistema ya está
-   * en claro: ahí el primer clic no mueve nada en pantalla y hacen falta dos
-   * para llegar a oscuro. Saliendo de `auto` se salta directo al tema
-   * contrario al que se está viendo, así que claro y oscuro siempre están a
-   * un clic. El último paso devuelve el control al sistema operativo.
+   * El botón tuvo tres estados (automático, claro, oscuro) y eso obligaba a un
+   * clic que no cambiaba nada en pantalla: pasar por `auto` en un equipo cuyo
+   * sistema ya está en ese tema se ve idéntico. `auto` sigue siendo el estado
+   * inicial —mientras nadie toque el botón, el sitio sigue al sistema
+   * operativo— pero deja de formar parte del recorrido del botón. Quien quiera
+   * devolverlo puede llamar a `setMode('auto')`.
    */
-  const cycleTheme = useCallback(() => {
-    const opposite: ResolvedTheme = systemTheme === 'light' ? 'dark' : 'light'
-    if (mode === 'auto') setMode(opposite)
-    else if (mode === opposite) setMode(systemTheme)
-    else setMode('auto')
-  }, [mode, systemTheme, setMode])
+  const toggleTheme = useCallback(() => {
+    setMode(resolved === 'light' ? 'dark' : 'light')
+  }, [resolved, setMode])
 
-  return { mode, resolved, setMode, cycleTheme }
+  return { mode, resolved, setMode, toggleTheme }
 }
 
 export function useTheme(): ThemeContextValue {
