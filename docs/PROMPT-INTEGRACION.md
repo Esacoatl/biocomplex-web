@@ -89,7 +89,7 @@ Antes de modificar nada, comprueba que corre en tu máquina y recórrelo entero:
   `/recursos`, `/noticias`, `/contacto`.
 - El login en `/acceso` (usa el botón «Usar credenciales de demo») y toda el área privada:
   `/boveda`, `/boveda/nota/*`, `/boveda/grafo`, `/boveda/etiquetas`.
-- Los tres estados de tema (automático, claro, oscuro) y los dos idiomas (ES/EN).
+- El botón de tema (claro ↔ oscuro) y el conmutador de idioma (ES/EN).
 - Móvil, tablet y escritorio.
 
 Así sabes cómo debe verse y comportarse el resultado final. Cualquier diferencia visual al
@@ -235,9 +235,11 @@ FASE 4 — INVARIANTES. Esto no se rompe.
    en `@theme inline`, y tokens de sistema. Ningún componente escribe un color literal. Un
    cambio de identidad se hace editando la capa 1; si te ves escribiendo `#fff` en un
    componente, estás rompiendo el rebrand futuro.
-2. TEMA. Tres estados: automático, claro y oscuro. Arranca en automático siguiendo al
-   sistema operativo. El script en `index.html` fija el atributo antes del primer pintado;
-   si cambias la clave `lab.theme.v1`, cámbiala en los dos lugares o reaparece el parpadeo.
+2. TEMA. El botón alterna claro ↔ oscuro en un solo clic. Al entrar, el sitio sigue al
+   sistema operativo (modo `auto`, disponible en `useTheme` con `setMode('auto')` pero
+   fuera del recorrido del botón: un tercer estado obliga a un clic que no cambia nada).
+   El script en `index.html` fija el atributo antes del primer pintado; si cambias la clave
+   `lab.theme.v1`, cámbiala en los dos lugares o reaparece el parpadeo.
 3. BILINGÜE. Todo texto visible se declara con `bi('es', 'en')`. Nada de cadenas sueltas en
    un solo idioma.
 4. ACCESIBILIDAD. Foco visible con `:focus-visible` —nunca `outline: none`—, respeto a
@@ -282,7 +284,7 @@ AUTOMÁTICAS
   · Un `[[wikilink]]` navega a la nota destino.
   · El buscador (⌘K) encuentra una nota por título y por texto del cuerpo.
   · Los filtros de `/publicaciones` y `/boveda/etiquetas` sobreviven a un recargado.
-  · Los tres estados de tema y los dos idiomas se aplican y persisten.
+  · El tema alterna en un clic, y tema e idioma persisten tras recargar.
 - Revisión de accesibilidad automatizada (axe o Lighthouse) en portada, una nota y el
   formulario de contacto: cero incidencias críticas.
 
