@@ -106,6 +106,14 @@ El área de la bóveda va en su propio chunk: quien nunca inicia sesión no la d
 
 ---
 
+## Para el equipo de integración
+
+El encargo completo —descubrimiento de la infraestructura existente, las cuatro costuras,
+invariantes, pruebas y despliegue— está en [`docs/PROMPT-INTEGRACION.md`](docs/PROMPT-INTEGRACION.md),
+escrito para pegarse directamente en un agente de código.
+
+---
+
 ## Qué falta conectar
 
 Cada maqueta está aislada en un solo archivo. Sustituirla no cambia ningún componente.
