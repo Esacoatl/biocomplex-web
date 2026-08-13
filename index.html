@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fcfcfa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0d0c" media="(prefers-color-scheme: dark)" />
+    <meta
+      name="description"
+      content="Biocomplex — laboratorio de investigación científica biológica: trabajo de laboratorio, análisis de datos y modelado de sistemas vivos."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Biocomplex</title>
+    <script>
+      // Applies the stored theme before first paint so there is no flash.
+      // Mirrors src/lib/theme/useTheme.ts — keep the storage key in sync.
+      ;(function () {
+        var root = document.documentElement
+        // Si el documento anfitrión ya fijó un tema, se respeta.
+        if (root.getAttribute('data-theme')) return
+        try {
+          var stored = localStorage.getItem('lab.theme.v1')
+          var mode = stored === 'light' || stored === 'dark' ? stored : null
+          var resolved =
+            mode || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+          root.setAttribute('data-theme', resolved)
+        } catch (e) {
+          root.setAttribute('data-theme', 'light')
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

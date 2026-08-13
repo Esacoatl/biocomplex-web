@@ -1,0 +1,41 @@
+{
+  "name": "biocomplex-web",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Sitio de Biocomplex — laboratorio de investigación científica biológica",
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "vite --port=3005 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --port=3005",
+    "lint": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"*.{json,html,md}\"",
+    "build:singlefile": "VITE_HASH_ROUTER=1 vite build --outDir dist-single --emptyOutDir && node scripts/make-singlefile.mjs preview.html",
+    "clean": "rm -rf dist dist-single"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.12",
+    "radix-ui": "^1.4.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.13.2",
+    "tailwind-merge": "^3.5.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "tailwindcss": "^4.1.14",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

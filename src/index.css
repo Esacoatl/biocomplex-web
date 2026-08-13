@@ -1,0 +1,402 @@
+/* ============================================================================
+   Sistema de diseño — Laboratorio
+   Tres capas: primitivos → semánticos (@theme) → tokens de sistema.
+   Ningún componente escribe un color literal. Un rebrand se hace en la capa 1.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-var.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/instrument-serif-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/instrument-serif-400-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-var.woff2') format('woff2');
+}
+
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   CAPA 1 — Primitivos. Valores crudos. Nunca se referencian desde componentes.
+   Contraste verificado contra --prim-paper-0 (#FCFCFA):
+     --prim-ink-900 #0C0F0E  → 18.9:1  AAA ✅
+     --prim-ink-500 #5B6360  →  5.6:1  AA  ✅ (texto secundario)
+     --prim-signal  #0F6E5C  →  5.2:1  AA  ✅ (enlaces y acentos de texto)
+   ------------------------------------------------------------------------- */
+:root {
+  --prim-ink-900: #0c0f0e;
+  --prim-ink-700: #2a302e;
+  --prim-ink-500: #5b6360;
+  --prim-ink-300: #98a19e;
+
+  --prim-paper-0: #fcfcfa; /* fondo de página */
+  --prim-paper-1: #ffffff; /* superficie elevada */
+  --prim-paper-2: #f2f2ed; /* superficie hundida / relleno sutil */
+
+  --prim-line: #e4e4dc;
+  --prim-line-strong: #cfcfc4;
+
+  --prim-signal: #0f6e5c; /* acento primario */
+  --prim-signal-hover: #0b5748;
+  --prim-signal-soft: #e2f0eb;
+  --prim-on-signal: #ffffff;
+
+  --prim-amber: #a8710f;
+  --prim-amber-soft: #f7edda;
+  --prim-plum: #6a4a9c;
+  --prim-plum-soft: #eee9f7;
+  --prim-danger: #a8322a;
+  --prim-danger-soft: #f8e6e4;
+}
+
+/* Tema oscuro — sólo se redefinen primitivos, nunca reglas de componentes. */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --prim-ink-900: #f1f3f1;
+  --prim-ink-700: #d5dad7;
+  --prim-ink-500: #949e9a;
+  --prim-ink-300: #6b7773;
+
+  --prim-paper-0: #0b0d0c;
+  --prim-paper-1: #121514;
+  --prim-paper-2: #191d1c;
+
+  --prim-line: #262c2a;
+  --prim-line-strong: #39423f;
+
+  --prim-signal: #3ad6ac;
+  --prim-signal-hover: #63e2c0;
+  --prim-signal-soft: #10241f;
+  --prim-on-signal: #06120f;
+
+  --prim-amber: #e0b062;
+  --prim-amber-soft: #241c0f;
+  --prim-plum: #b79ce8;
+  --prim-plum-soft: #1b1626;
+  --prim-danger: #f08a80;
+  --prim-danger-soft: #2a1512;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+}
+
+/* ---------------------------------------------------------------------------
+   CAPA 2 — Semánticos. `@theme inline` genera las utilidades de Tailwind
+   (bg-*, text-*, border-*) apuntando directo al primitivo, de modo que el
+   cambio de tema en <html data-theme> se propaga sin recompilar.
+   ------------------------------------------------------------------------- */
+@theme inline {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --color-bg: var(--prim-paper-0);
+  --color-surface: var(--prim-paper-1);
+  --color-sunken: var(--prim-paper-2);
+
+  --color-fg: var(--prim-ink-900);
+  --color-fg-muted: var(--prim-ink-700);
+  --color-fg-subtle: var(--prim-ink-500);
+  --color-fg-faint: var(--prim-ink-300);
+
+  --color-line: var(--prim-line);
+  --color-line-strong: var(--prim-line-strong);
+
+  --color-accent: var(--prim-signal);
+  --color-accent-hover: var(--prim-signal-hover);
+  --color-accent-soft: var(--prim-signal-soft);
+  --color-on-accent: var(--prim-on-signal);
+
+  --color-amber: var(--prim-amber);
+  --color-amber-soft: var(--prim-amber-soft);
+  --color-plum: var(--prim-plum);
+  --color-plum-soft: var(--prim-plum-soft);
+  --color-danger: var(--prim-danger);
+  --color-danger-soft: var(--prim-danger-soft);
+
+  /* Radios del sistema — sobrescriben la escala por defecto de Tailwind */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
+}
+
+/* ---------------------------------------------------------------------------
+   CAPA 3 — Tokens de sistema: espaciado, radios, sombras, motion, foco.
+   ------------------------------------------------------------------------- */
+:root {
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+  --r-xl: 22px;
+
+  --shadow-1: 0 1px 2px rgb(12 15 14 / 0.04), 0 1px 3px rgb(12 15 14 / 0.06);
+  --shadow-2: 0 4px 12px rgb(12 15 14 / 0.06), 0 12px 32px rgb(12 15 14 / 0.08);
+
+  --motion-fast: 140ms;
+  --motion-base: 220ms;
+  --motion-slow: 380ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --focus-ring-color: var(--prim-signal);
+  --focus-ring-width: 2px;
+
+  --header-h: 64px;
+  --measure: 68ch; /* ancho de lectura cómodo */
+}
+
+[data-theme='dark'] {
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-2: 0 4px 12px rgb(0 0 0 / 0.45), 0 12px 32px rgb(0 0 0 / 0.35);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background-color: var(--prim-paper-0);
+  color: var(--prim-ink-900);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--motion-base) var(--ease),
+    color var(--motion-base) var(--ease);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+  letter-spacing: -0.015em;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+/* Anclas de encabezado: que el header fijo no las tape */
+[id] {
+  scroll-margin-top: calc(var(--header-h) + 24px);
+}
+
+::selection {
+  background: var(--prim-signal-soft);
+  color: var(--prim-ink-900);
+}
+
+/* Foco visible sólo en navegación por teclado */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* Scrollbars discretas */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--prim-line-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--prim-line-strong);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
+}
+
+/* iOS Safari hace auto-zoom si un campo enfocado tiene font-size < 16px */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Red de seguridad para prefers-reduced-motion; los variants de motion
+   se manejan aparte en src/lib/motion.ts */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Utilidades propias
+   ------------------------------------------------------------------------- */
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Retícula de fondo, muy tenue — da textura sin ruido visual */
+@utility grid-paper {
+  background-image:
+    linear-gradient(to right, var(--prim-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--prim-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 78%);
+}
+
+/* Tipografía de contenido largo (notas del vault, páginas de texto) */
+.prose-lab {
+  color: var(--prim-ink-700);
+  line-height: 1.72;
+}
+.prose-lab > * + * {
+  margin-top: 1em;
+}
+.prose-lab h1,
+.prose-lab h2,
+.prose-lab h3 {
+  color: var(--prim-ink-900);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+}
+.prose-lab h1 {
+  font-size: 1.75rem;
+}
+.prose-lab h2 {
+  font-size: 1.3rem;
+}
+.prose-lab h3 {
+  font-size: 1.05rem;
+}
+.prose-lab a {
+  color: var(--prim-signal);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose-lab a:hover {
+  color: var(--prim-signal-hover);
+}
+.prose-lab code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--prim-paper-2);
+  border: 1px solid var(--prim-line);
+  border-radius: var(--r-sm);
+  padding: 0.1em 0.35em;
+}
+.prose-lab pre {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  background: var(--prim-paper-2);
+  border: 1px solid var(--prim-line);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  overflow-x: auto;
+}
+.prose-lab pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+.prose-lab blockquote {
+  border-left: 2px solid var(--prim-line-strong);
+  padding-left: 16px;
+  color: var(--prim-ink-500);
+  font-style: italic;
+}
+.prose-lab ul,
+.prose-lab ol {
+  padding-left: 1.25rem;
+}
+.prose-lab ul {
+  list-style: disc;
+}
+.prose-lab ol {
+  list-style: decimal;
+}
+.prose-lab li::marker {
+  color: var(--prim-ink-300);
+}
+.prose-lab hr {
+  border: 0;
+  border-top: 1px solid var(--prim-line);
+  margin: 2em 0;
+}
+.prose-lab table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.prose-lab th,
+.prose-lab td {
+  border: 1px solid var(--prim-line);
+  padding: 8px 12px;
+  text-align: left;
+}
+.prose-lab th {
+  background: var(--prim-paper-2);
+  font-weight: 600;
+  color: var(--prim-ink-900);
+}

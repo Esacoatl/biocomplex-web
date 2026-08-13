@@ -1,0 +1,8 @@
+node_modules
+dist
+dist-single
+preview.html
+.DS_Store
+*.local
+.vscode/*
+!.vscode/extensions.json
